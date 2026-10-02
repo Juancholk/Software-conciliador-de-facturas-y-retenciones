@@ -1,0 +1,19 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Angular / Node
+node_modules/
+.angular/
+dist/
+
+# Variables de entorno y logs
+.env
+*.log
+
+# Editor / sistema
+.vscode/
+.DS_Store
+Thumbs.db
