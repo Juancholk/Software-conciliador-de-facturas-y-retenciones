@@ -1,0 +1,86 @@
+.ayuda {
+  color: var(--gris-texto);
+  margin: 6px 0 20px;
+}
+
+.zonas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.zona {
+  border: 2px dashed var(--gris-borde);
+  border-radius: var(--radio);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.zona:hover {
+  border-color: var(--negro);
+}
+
+.zona.lista {
+  border-style: solid;
+  border-color: var(--amarillo);
+  background: var(--amarillo-suave);
+}
+
+.zona input {
+  display: none;
+}
+
+.icono {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--amarillo);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 18px;
+}
+
+.titulo {
+  font-weight: 700;
+}
+
+.nombre {
+  font-size: 13px;
+  color: var(--gris-texto);
+  word-break: break-all;
+}
+
+.error {
+  color: var(--rojo);
+  font-weight: 600;
+}
+
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: var(--blanco);
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+  vertical-align: -2px;
+  margin-right: 6px;
+}
+
+@keyframes girar {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 640px) {
+  .zonas {
+    grid-template-columns: 1fr;
+  }
+}

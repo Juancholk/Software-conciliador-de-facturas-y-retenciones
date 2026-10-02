@@ -189,6 +189,10 @@ def validar_contabilidad(factura: dict, registros: list[dict]) -> tuple[list[dic
 def conciliar(facturas: list[dict], contabilidad: list[dict]) -> dict:
     conteo_ids = Counter(f.get("id_factura", "") for f in facturas)
 
+    filas_por_id = defaultdict(list)
+    for numero_fila, factura in enumerate(facturas, start=2):
+        filas_por_id[factura.get("id_factura", "")].append(numero_fila)
+
     registros_por_factura = defaultdict(list)
     for registro in contabilidad:
         registros_por_factura[registro.get("id_factura", "")].append(registro)
@@ -198,12 +202,17 @@ def conciliar(facturas: list[dict], contabilidad: list[dict]) -> dict:
     montos = {"iva": Decimal("0"), "retencion": Decimal("0"),
               "total": Decimal("0"), "valor_contable": Decimal("0")}
 
-    for numero_fila, factura in enumerate(facturas, start=2):  # fila 1 = encabezado
+    for numero_fila, factura in enumerate(facturas, start=2):
         id_factura = factura.get("id_factura", "")
         causas = validar_campos(factura) + validar_formatos(factura)
 
         if id_factura and conteo_ids[id_factura] > 1:
-            causas.append(causa("ID_DUPLICADO", f"Aparece {conteo_ids[id_factura]} veces en el archivo"))
+            otras = [str(n) for n in filas_por_id[id_factura] if n != numero_fila]
+            causas.append(causa(
+                "ID_DUPLICADO",
+                f"Aparece {conteo_ids[id_factura]} veces en el archivo. "
+                f"Revisar también la fila {', '.join(otras)}",
+            ))
 
         causas_calc, calculos, difs = validar_calculos(factura)
         causas_cont, contable, dif_cont = validar_contabilidad(

@@ -1,55 +1,69 @@
 import { Component, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Conciliacion, ConteoRespuesta } from './services/conciliacion';
+import { ArchivosSeleccionados, CargaArchivos } from './components/carga-archivos/carga-archivos';
+import { Resumen } from './components/resumen/resumen';
+import { TablaResultados } from './components/tabla-resultados/tabla-resultados';
+import { EstadoFactura, FacturaResultado, ResultadoConciliacion } from './models/resultado.model';
+import { Conciliacion } from './services/conciliacion';
 
 @Component({
   selector: 'app-root',
+  imports: [CargaArchivos, Resumen, TablaResultados],
   styleUrl: './app.css',
   templateUrl: './app.html',
 })
 export class App {
   private conciliacion = inject(Conciliacion);
 
-  facturas = signal<File | null>(null);
-  contabilidad = signal<File | null>(null);
+  resultado = signal<ResultadoConciliacion | null>(null);
+  facturas = signal<FacturaResultado[]>([]);
+  estadoFiltro = signal<EstadoFactura | null>(null);
   cargando = signal(false);
+  consultando = signal(false);
   error = signal<string | null>(null);
-  resultado = signal<ConteoRespuesta | null>(null);
 
-  seleccionarFacturas(evento: Event) {
-    const input = evento.target as HTMLInputElement;
-    this.facturas.set(input.files?.[0] ?? null);
-  }
-
-  seleccionarContabilidad(evento: Event) {
-    const input = evento.target as HTMLInputElement;
-    this.contabilidad.set(input.files?.[0] ?? null);
-  }
-
-  procesar() {
-    const facturas = this.facturas();
-    const contabilidad = this.contabilidad();
-    if (!facturas || !contabilidad) {
-      this.error.set('Debe seleccionar los dos archivos.');
-      return;
-    }
-
+  procesar(archivos: ArchivosSeleccionados) {
     this.cargando.set(true);
     this.error.set(null);
     this.resultado.set(null);
 
-    this.conciliacion.conciliar(facturas, contabilidad).subscribe({
+    this.conciliacion.conciliar(archivos.facturas, archivos.contabilidad).subscribe({
       next: (respuesta) => {
         this.resultado.set(respuesta);
+        this.facturas.set(respuesta.detalle);
+        this.estadoFiltro.set(null);
         this.cargando.set(false);
       },
       error: (err: HttpErrorResponse) => {
-        const mensaje = err.status === 0
-          ? 'No se pudo conectar con el servidor. Verifique que el backend esté encendido.'
-          : err.error?.detail ?? 'Ocurrió un error al procesar los archivos.';
-        this.error.set(mensaje);
+        this.error.set(this.mensajeError(err));
         this.cargando.set(false);
       },
     });
+  }
+
+  /** El filtro por estado se resuelve en el backend con GET /api/resultados. */
+  filtrar(estado: EstadoFactura | null) {
+    this.estadoFiltro.set(estado);
+    this.consultando.set(true);
+    this.error.set(null);
+
+    this.conciliacion.consultar(estado ?? undefined).subscribe({
+      next: (respuesta) => {
+        this.facturas.set(respuesta.detalle);
+        this.consultando.set(false);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.error.set(this.mensajeError(err));
+        this.consultando.set(false);
+      },
+    });
+  }
+
+  private mensajeError(err: HttpErrorResponse): string {
+    // status 0 = el backend no respondió (apagado o bloqueado por CORS)
+    if (err.status === 0) {
+      return 'No se pudo conectar con el servidor. Verifique que el backend esté en ejecución en el puerto 8000.';
+    }
+    return err.error?.detail ?? 'Ocurrió un error inesperado al procesar la solicitud.';
   }
 }

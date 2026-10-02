@@ -1,0 +1,131 @@
+.indicadores {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.indicador {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-top: 6px solid var(--negro);
+}
+
+.indicador.correctas {
+  border-top-color: var(--verde);
+}
+
+.indicador.inconsistentes {
+  border-top-color: var(--rojo);
+}
+
+.etiqueta {
+  font-size: 14px;
+  color: var(--gris-texto);
+  font-weight: 600;
+}
+
+.indicador strong {
+  font-size: 36px;
+  font-weight: 800;
+}
+
+.nota {
+  font-size: 13px;
+  color: var(--gris-texto);
+}
+
+.detalle-resumen {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.ayuda {
+  color: var(--gris-texto);
+  font-size: 13px;
+  margin: 4px 0 16px;
+}
+
+.causa {
+  margin-bottom: 12px;
+}
+
+.causa-texto {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.barra {
+  height: 8px;
+  background: var(--gris-fondo);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.relleno {
+  height: 100%;
+  background: var(--amarillo);
+  border-radius: 999px;
+}
+
+.montos {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  row-gap: 10px;
+  margin: 0 0 16px;
+}
+
+.montos dt {
+  color: var(--gris-texto);
+}
+
+.montos dd {
+  margin: 0;
+  font-weight: 700;
+  text-align: right;
+}
+
+.aviso {
+  background: var(--amarillo-suave);
+  border-left: 4px solid var(--amarillo);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 13px;
+}
+
+.aviso span {
+  display: block;
+  margin-top: 2px;
+  color: var(--gris-texto);
+}
+
+.sin-factura {
+  margin-bottom: 16px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--gris-borde);
+}
+
+@media (max-width: 900px) {
+  .indicadores {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .detalle-resumen {
+    grid-template-columns: 1fr;
+  }
+}

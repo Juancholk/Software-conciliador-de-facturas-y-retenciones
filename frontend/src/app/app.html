@@ -1,26 +1,50 @@
-<main>
-  <h1>Conciliador de facturas y retenciones</h1>
+<header class="barra-superior">
+  <div class="contenido barra-contenido">
+    <img src="logos/bancolombia.png" alt="Bancolombia" class="logo" />
+    <span class="area">Gerencia de Evolución Contable y Tributaria</span>
+  </div>
+</header>
 
-  <label>
-    Archivo de facturas
-    <input type="file" accept=".csv" (change)="seleccionarFacturas($event)" />
-  </label>
+<section class="portada">
+  <div class="contenido portada-contenido">
+    <div>
+      <span class="etiqueta">Prototipo</span>
+      <h1>Conciliador de facturas y retenciones</h1>
+      <p>
+        Cruce automático entre las facturas de proveedores y los registros contables.
+        Valida IVA, retención y total, identifica duplicados y facturas sin contabilizar,
+        y explica la causa de cada inconsistencia.
+      </p>
+    </div>
+    <img src="logos/curva.png" alt="" class="decoracion" />
+  </div>
+</section>
 
-  <label>
-    Archivo de contabilidad
-    <input type="file" accept=".csv" (change)="seleccionarContabilidad($event)" />
-  </label>
-
-  <button (click)="procesar()" [disabled]="cargando()">
-    {{ cargando() ? 'Procesando...' : 'Procesar' }}
-  </button>
+<main class="contenido">
+  <app-carga-archivos [cargando]="cargando()" (procesar)="procesar($event)" />
 
   @if (error()) {
-    <p class="error">{{ error() }}</p>
+    <div class="alerta" role="alert">
+      <strong>No fue posible completar la operación.</strong>
+      <span>{{ error() }}</span>
+    </div>
   }
 
   @if (resultado(); as r) {
-    <p>Facturas leídas: {{ r.facturas_leidas }}</p>
-    <p>Registros contables leídos: {{ r.registros_contables_leidos }}</p>
+    <h2 class="titulo-seccion">Resumen de la conciliación</h2>
+    <app-resumen [resultado]="r" />
+
+    <app-tabla-resultados
+      [facturas]="facturas()"
+      [estado]="estadoFiltro()"
+      [cargando]="consultando()"
+      (cambioEstado)="filtrar($event)" />
   }
 </main>
+
+<footer class="pie">
+  <img src="logos/curvas-franja.png" alt="" class="franja" />
+  <div class="pie-contenido">
+    <img src="logos/grupo-cibest.png" alt="Grupo Cibest" class="logo-pie" />
+  </div>
+</footer>

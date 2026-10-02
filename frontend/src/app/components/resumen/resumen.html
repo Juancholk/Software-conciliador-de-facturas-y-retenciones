@@ -1,0 +1,81 @@
+<section class="indicadores">
+  <article class="tarjeta indicador">
+    <span class="etiqueta">Registros leídos</span>
+    <strong>{{ resumen().registros_leidos }}</strong>
+    <span class="nota">{{ resumen().facturas_unicas }} facturas únicas</span>
+  </article>
+
+  <article class="tarjeta indicador correctas">
+    <span class="etiqueta">Correctas</span>
+    <strong>{{ resumen().correctas }}</strong>
+    <span class="nota">{{ porcentajeCorrectas() }}% del total</span>
+  </article>
+
+  <article class="tarjeta indicador inconsistentes">
+    <span class="etiqueta">Con inconsistencia</span>
+    <strong>{{ resumen().con_inconsistencia }}</strong>
+    <span class="nota">{{ 100 - porcentajeCorrectas() }}% del total</span>
+  </article>
+
+  <article class="tarjeta indicador">
+    <span class="etiqueta">Registros contables</span>
+    <strong>{{ resumen().registros_contables_leidos }}</strong>
+    <span class="nota">{{ resumen().registros_contables_sin_factura }} sin factura</span>
+  </article>
+</section>
+
+<section class="detalle-resumen">
+  <article class="tarjeta">
+    <h3>Inconsistencias por causa</h3>
+    <p class="ayuda">Número de facturas afectadas. Una factura puede tener varias causas.</p>
+    @for (c of causas(); track c.codigo) {
+      <div class="causa">
+        <div class="causa-texto">
+          <span>{{ c.descripcion }}</span>
+          <strong>{{ c.cantidad }}</strong>
+        </div>
+        <div class="barra"><div class="relleno" [style.width.%]="c.ancho"></div></div>
+      </div>
+    } @empty {
+      <p class="ayuda">No se encontraron inconsistencias.</p>
+    }
+  </article>
+
+  <article class="tarjeta">
+    <h3>Diferencias encontradas</h3>
+    <p class="ayuda">Suma de las diferencias absolutas por concepto.</p>
+    <dl class="montos">
+      <dt>IVA</dt><dd>{{ resumen().monto_diferencias.iva | pesos }}</dd>
+      <dt>Retención</dt><dd>{{ resumen().monto_diferencias.retencion | pesos }}</dd>
+      <dt>Total factura</dt><dd>{{ resumen().monto_diferencias.total | pesos }}</dd>
+      <dt>Valor contabilizado</dt><dd>{{ resumen().monto_diferencias.valor_contable | pesos }}</dd>
+    </dl>
+
+    @for (a of resultado().advertencias; track a.codigo) {
+      <div class="aviso">
+        <strong>Advertencia:</strong> {{ a.descripcion }}.
+        <span>{{ a.detalle }}</span>
+      </div>
+    }
+  </article>
+</section>
+
+@if (resultado().registros_sin_factura.length) {
+  <section class="tarjeta sin-factura">
+    <h3>Registros contables sin factura</h3>
+    <p class="ayuda">Registros contabilizados que no tienen una factura que los soporte.</p>
+    <table>
+      <thead>
+        <tr><th>Fila</th><th>Id factura</th><th>Fecha</th><th>Cuenta</th><th>Valor</th></tr>
+      </thead>
+      <tbody>
+        @for (r of resultado().registros_sin_factura; track r.fila) {
+          <tr>
+            <td>{{ r.fila }}</td><td>{{ r.id_factura }}</td><td>{{ r.fecha_contabilizacion }}</td>
+            <td>{{ r.cuenta_contable }}</td><td>{{ r.valor_debito | pesos }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </section>
+}

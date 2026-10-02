@@ -1,0 +1,133 @@
+<section class="tarjeta">
+  <div class="encabezado">
+    <h2>Detalle de facturas</h2>
+    <div class="filtros-estado">
+      @for (opcion of opcionesEstado; track opcion.texto) {
+        <button
+          class="chip"
+          [class.activo]="estado() === opcion.valor"
+          (click)="seleccionarEstado(opcion.valor)">
+          {{ opcion.texto }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="filtros">
+    <input
+      type="search"
+      placeholder="Buscar por id, NIT o concepto"
+      [value]="busqueda()"
+      (input)="busqueda.set(leerTexto($event))" />
+
+    <select [value]="causaSeleccionada()" (change)="causaSeleccionada.set(leerTexto($event))">
+      <option value="">Todas las causas</option>
+      @for (c of causasDisponibles(); track c.codigo) {
+        <option [value]="c.codigo">{{ c.descripcion }}</option>
+      }
+    </select>
+  </div>
+
+  <p class="conteo">
+    @if (cargando()) {
+      Consultando...
+    } @else {
+      Mostrando {{ facturasVisibles().length }} de {{ facturas().length }} facturas. Haga clic en una fila para ver el detalle.
+    }
+  </p>
+
+  <div class="contenedor-tabla" [class.atenuado]="cargando()">
+    <table>
+      <thead>
+        <tr>
+          <th>Fila</th>
+          <th>Id factura</th>
+          <th>NIT proveedor</th>
+          <th>Fecha</th>
+          <th>Concepto</th>
+          <th class="numero">Total</th>
+          <th>Estado</th>
+          <th>Causas</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (f of facturasVisibles(); track f.fila) {
+          <tr class="fila" [class.abierta]="filaAbierta() === f.fila" (click)="alternarFila(f.fila)">
+            <td>{{ f.fila }}</td>
+            <td class="id">{{ f.id_factura || '—' }}</td>
+            <td>{{ f.nit_proveedor || '—' }}</td>
+            <td class="sin-salto">{{ f.fecha_factura || '—' }}</td>
+            <td>{{ f.concepto || '—' }}</td>
+            <td class="numero">{{ f.calculos.total_reportado | pesos }}</td>
+            <td>
+              <span class="estado" [class.ok]="f.estado === 'Correcta'">{{ f.estado }}</span>
+            </td>
+            <td>
+              @for (c of f.causas; track c.codigo) {
+                <span class="codigo">{{ c.codigo }}</span>
+              }
+            </td>
+          </tr>
+
+          @if (filaAbierta() === f.fila) {
+            <tr class="detalle">
+              <td colspan="8">
+                <div class="panel">
+                  <div>
+                    <h4>Causas</h4>
+                    @for (c of f.causas; track c.codigo) {
+                      <p class="causa">
+                        <strong>{{ c.descripcion }}</strong>
+                        @if (c.detalle) {
+                          <span>{{ c.detalle }}</span>
+                        }
+                      </p>
+                    } @empty {
+                      <p class="causa">La factura cumple todas las reglas.</p>
+                    }
+                  </div>
+
+                  <div>
+                    <h4>Trazabilidad del cálculo</h4>
+                    <table class="calculos">
+                      <thead>
+                        <tr><th></th><th class="numero">Esperado</th><th class="numero">Reportado</th><th class="numero">Diferencia</th></tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>IVA</td>
+                          <td class="numero">{{ f.calculos.iva_esperado | pesos }}</td>
+                          <td class="numero">{{ f.calculos.iva_reportado | pesos }}</td>
+                          <td class="numero">{{ diferencia(f.calculos.iva_esperado, f.calculos.iva_reportado) | pesos }}</td>
+                        </tr>
+                        <tr>
+                          <td>Retención</td>
+                          <td class="numero">{{ f.calculos.retencion_esperada | pesos }}</td>
+                          <td class="numero">{{ f.calculos.retencion_reportada | pesos }}</td>
+                          <td class="numero">{{ diferencia(f.calculos.retencion_esperada, f.calculos.retencion_reportada) | pesos }}</td>
+                        </tr>
+                        <tr>
+                          <td>Total</td>
+                          <td class="numero">{{ f.calculos.total_esperado | pesos }}</td>
+                          <td class="numero">{{ f.calculos.total_reportado | pesos }}</td>
+                          <td class="numero">{{ diferencia(f.calculos.total_esperado, f.calculos.total_reportado) | pesos }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <p class="contable">
+                      Base gravable: <strong>{{ f.base_gravable | pesos }}</strong> ·
+                      Registros contables: <strong>{{ f.contabilidad.registros }}</strong> ·
+                      Valor contabilizado: <strong>{{ f.contabilidad.valor_contabilizado | pesos }}</strong>
+                    </p>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          }
+        } @empty {
+          <tr><td colspan="8" class="vacio">No hay facturas que coincidan con los filtros.</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

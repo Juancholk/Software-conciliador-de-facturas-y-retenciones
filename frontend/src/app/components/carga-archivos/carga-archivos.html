@@ -1,0 +1,32 @@
+<section class="tarjeta">
+  <h2>Cargar archivos</h2>
+  <p class="ayuda">Seleccione los dos archivos en formato CSV para iniciar la conciliación.</p>
+
+  <div class="zonas">
+    <label class="zona" [class.lista]="facturas()">
+      <input type="file" accept=".csv" (change)="seleccionar($event, 'facturas')" />
+      <span class="icono">{{ facturas() ? '✓' : '↑' }}</span>
+      <span class="titulo">Facturas de proveedores</span>
+      <span class="nombre">{{ facturas()?.name ?? 'facturas.csv' }}</span>
+    </label>
+
+    <label class="zona" [class.lista]="contabilidad()">
+      <input type="file" accept=".csv" (change)="seleccionar($event, 'contabilidad')" />
+      <span class="icono">{{ contabilidad() ? '✓' : '↑' }}</span>
+      <span class="titulo">Registros contables</span>
+      <span class="nombre">{{ contabilidad()?.name ?? 'contabilidad.csv' }}</span>
+    </label>
+  </div>
+
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
+
+  <button class="boton" (click)="enviar()" [disabled]="cargando()">
+    @if (cargando()) {
+      <span class="spinner"></span> Procesando...
+    } @else {
+      Conciliar
+    }
+  </button>
+</section>

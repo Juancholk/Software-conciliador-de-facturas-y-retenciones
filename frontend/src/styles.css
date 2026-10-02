@@ -1,1 +1,76 @@
-/* You can add global styles to this file, and also import other style files */
+/* Fuente instalada con npm para que funcione sin conexión a internet */
+@import '@fontsource/open-sans/400.css';
+@import '@fontsource/open-sans/600.css';
+@import '@fontsource/open-sans/700.css';
+@import '@fontsource/open-sans/800.css';
+
+/* Paleta inspirada en la identidad visual de Bancolombia */
+:root {
+  --amarillo: #fdda24;
+  --amarillo-suave: #fff6c8;
+  --negro: #2c2a29;
+  --gris-texto: #5c5c5c;
+  --gris-borde: #e2e2e2;
+  --gris-fondo: #f7f7f7;
+  --blanco: #ffffff;
+  --verde: #00c389;
+  --verde-suave: #e3f8f0;
+  --rojo: #e2483d;
+  --rojo-suave: #fdecea;
+  --naranja: #ff7f41;
+  --morado: #9063cd;
+  --radio: 16px;
+  --sombra: 0 2px 12px rgba(44, 42, 41, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Open Sans', Arial, sans-serif;
+  color: var(--negro);
+  background: var(--gris-fondo);
+}
+
+h1, h2, h3 {
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
+}
+
+.tarjeta {
+  background: var(--blanco);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 24px;
+}
+
+.boton {
+  border: none;
+  border-radius: 999px;
+  padding: 12px 28px;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  background: var(--negro);
+  color: var(--blanco);
+  transition: opacity 0.2s;
+}
+
+.boton:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.boton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.boton-amarillo {
+  background: var(--amarillo);
+  color: var(--negro);
+}

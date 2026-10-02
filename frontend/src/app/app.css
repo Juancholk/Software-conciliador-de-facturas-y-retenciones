@@ -1,23 +1,152 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.contenido {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.barra-superior {
+  background: var(--blanco);
+  border-bottom: 4px solid var(--amarillo);
+}
+
+.barra-contenido {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: 72px;
+}
+
+.logo {
+  height: 36px;
+}
+
+.area {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gris-texto);
+  text-align: right;
+}
+
+.portada {
+  background: var(--blanco);
+  margin-bottom: 32px;
+}
+
+.portada-contenido {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  align-items: center;
+  gap: 24px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+.etiqueta {
+  display: inline-block;
+  background: var(--amarillo);
+  border-radius: 999px;
+  padding: 4px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.portada h1 {
+  font-size: 40px;
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+.portada p {
+  color: var(--gris-texto);
+  font-size: 17px;
+  line-height: 1.5;
+  max-width: 640px;
+  margin: 0;
+}
+
+.decoracion {
+  width: 100%;
+  max-width: 320px;
+  justify-self: end;
+}
+
 main {
-  max-width: 600px;
-  margin: 40px auto;
-  font-family: sans-serif;
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  padding-bottom: 48px;
 }
 
-label {
+.titulo-seccion {
+  margin-top: 16px;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.alerta {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  background: var(--rojo-suave);
+  border-left: 6px solid var(--rojo);
+  border-radius: 12px;
+  padding: 16px 20px;
 }
 
-button {
-  padding: 8px 16px;
-  cursor: pointer;
+.pie {
+  background: var(--blanco);
 }
 
-.error {
-  color: #b00020;
+.franja {
+  display: block;
+  width: 100%;
+  height: 72px;
+  object-fit: cover;
+  object-position: top;
+}
+
+.pie-contenido {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 24px;
+  font-size: 13px;
+  color: var(--gris-texto);
+}
+
+.logo-pie {
+  height: 36px;
+}
+
+@media (max-width: 760px) {
+  .portada-contenido {
+    grid-template-columns: 1fr;
+  }
+
+  .decoracion {
+    display: none;
+  }
+
+  .portada h1 {
+    font-size: 30px;
+  }
+
+  .area {
+    display: none;
+  }
 }
