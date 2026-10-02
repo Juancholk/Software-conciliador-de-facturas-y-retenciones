@@ -130,7 +130,7 @@ source .venv/bin/activate
 Instalar dependencias e iniciar la API:
 
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
 ```
 
