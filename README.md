@@ -280,4 +280,4 @@ Los logotipos de Bancolombia y Grupo Cibest se usan únicamente con fines de dem
 
 ## Uso de inteligencia artificial
 
-Ver [DECLARACION_IA.md](DECLARACION_IA.md).
+Ver [Declaracion_IA.md](Declaracion_IA.md).
