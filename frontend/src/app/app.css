@@ -1,0 +1,23 @@
+main {
+  max-width: 600px;
+  margin: 40px auto;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+button {
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.error {
+  color: #b00020;
+}

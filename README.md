@@ -22,3 +22,27 @@ Software contable conciliador de facturas y retenciones.
 11. En cada registro contable, el débito y el crédito deben ser iguales.
 12. El valor total del débito (o crédito) contabilizado debe ser igual al total de la factura.
 13. Los registros contables con valor en 0 se marcan como inconsistencia, porque no aportan valor y generan ruido en la conciliación.
+
+
+## Catálogo de causas
+
+| Código | Descripción |
+|---|---|
+| CAMPO_VACIO | Campo obligatorio vacío |
+| ID_DUPLICADO | Id_Factura duplicado en el archivo de facturas |
+| TARIFA_IVA_INVALIDA | Tarifa de IVA no válida (permitidas: 0%, 5%, 19%) |
+| DIF_IVA | El valor del IVA no coincide con base × tarifa |
+| DIF_RETENCION | El valor de la retención no coincide con base × tarifa |
+| DIF_TOTAL | El total no coincide con base + IVA − retención |
+| SIN_REGISTRO_CONTABLE | La factura no tiene registro contable |
+| ESTADO_PENDIENTE | El registro contable no está en estado Contabilizada |
+| DEBITO_CREDITO_DIFERENTE | El débito y el crédito del registro no son iguales |
+| DIF_VALOR_CONTABLE | El valor contabilizado no coincide con el total de la factura |
+| REGISTRO_CONTABLE_EN_CERO | Existe un registro contable con valor en 0 |
+
+**Advertencias** (no cambian el estado de la factura)
+
+| Código | Descripción |
+|---|---|
+| VARIOS_PERIODOS | Los registros pertenecen a más de un periodo contable |
+| REGISTRO_SIN_FACTURA | Registro contable sin factura asociada |
