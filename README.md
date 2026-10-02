@@ -22,6 +22,7 @@ Software contable conciliador de facturas y retenciones.
 11. En cada registro contable, el débito y el crédito deben ser iguales.
 12. El valor total del débito (o crédito) contabilizado debe ser igual al total de la factura.
 13. Los registros contables con valor en 0 se marcan como inconsistencia, porque no aportan valor y generan ruido en la conciliación.
+14. La conciliación se hace en ambas direcciones: cada factura debe tener registro contable y cada registro contable debe tener factura. Los registros sin factura se reportan como inconsistencia en una lista aparte, ya que no corresponden a ninguna factura del archivo.
 
 
 ## Catálogo de causas
@@ -45,4 +46,3 @@ Software contable conciliador de facturas y retenciones.
 | Código | Descripción |
 |---|---|
 | VARIOS_PERIODOS | Los registros pertenecen a más de un periodo contable |
-| REGISTRO_SIN_FACTURA | Registro contable sin factura asociada |
